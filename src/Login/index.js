@@ -1,22 +1,20 @@
-import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
-import { IconButton, Box } from "@mui/material";
-import { ref, get } from "firebase/database";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { Box } from "@mui/material";
 import bcrypt from "bcryptjs";
+import { get, ref } from "firebase/database";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import Input from "../Component/Input";
 import Button from "../Component/Button";
+import Input from "../Component/Input";
 
 import db from "../firebase";
 import "./login.css";
 
-// Initialize Firebase Auth
-const auth = getAuth();
+// // Initialize Firebase Auth
+// const auth = getAuth();
 
-// Create a new Google provider
-const provider = new GoogleAuthProvider();
+// // Create a new Google provider
+// const provider = new GoogleAuthProvider();
 
 const initializeLoginForm = { email: "", password: "" };
 
@@ -71,10 +69,10 @@ function Login() {
           Register
         </a>
         <h1>Login</h1>
-        <div className="text-input">
-          <div>Email:</div>
+        <div style={{ padding: "20px 0" }}>
           <Input
             type="email"
+            label="Email"
             placeholder="Email"
             // style={{ marginBottom: "10px" }}
             onChange={(e) =>
@@ -82,10 +80,10 @@ function Login() {
             }
           />
         </div>
-        <div className="text-input">
-          <div>Password:</div>
+        <div style={{ padding: "20px 0" }}>
           <Input
             type="password"
+            label="Password"
             placeholder="Password"
             style={{ marginBottom: "15px" }}
             onChange={(e) =>

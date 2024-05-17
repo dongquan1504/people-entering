@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-import { Bar, Line } from "react-chartjs-2";
+import { Box, Tab, Tabs } from "@mui/material";
 import {
-  Tooltip,
-  Legend,
   BarElement,
-  LineElement,
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
   LinearScale,
-  TimeScale,
   PointElement,
+  TimeScale,
+  Tooltip,
 } from "chart.js";
-import { Tabs, Tab, Box } from "@mui/material";
 import "chartjs-adapter-moment";
-import { ref, set, get } from "firebase/database";
+import { get, ref } from "firebase/database";
+import { Bar, Line } from "react-chartjs-2";
 import db from "../../firebase";
 
 import Header from "../../Component/Header";
@@ -32,8 +31,6 @@ ChartJS.register(
 );
 
 function Home() {
-  const navigate = useNavigate();
-
   const [valueTab, setValueTab] = useState(0);
   const [data, setData] = useState([]);
 

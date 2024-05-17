@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { useNavigate, useParams } from "react-router-dom";
-import { ref, set, get, push } from "firebase/database";
 import { Box } from "@mui/material";
 import bcrypt from "bcryptjs";
+import { get, push, ref, set } from "firebase/database";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import Input from "../Component/Input";
 import Button from "../Component/Button";
+import Input from "../Component/Input";
 import db from "../firebase";
 
 import "./register.css";
@@ -16,16 +15,17 @@ const initializeLoginForm = {
   password: "",
   name: "",
   number: "",
-  birthday: "",
 };
 
 function Register() {
   const [registerForm, setRegisterForm] = useState(initializeLoginForm);
   const [isError, setError] = useState(false);
+  const [isSubmit, setSubmit] = useState(false);
   const navigate = useNavigate();
   const usersRef = ref(db, "users");
 
   const handleSignUp = () => {
+    setSubmit(true);
     get(usersRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -33,7 +33,11 @@ function Register() {
             (user) => user.email === registerForm.email
           );
 
-          if (!user) {
+          if (
+            !user &&
+            registerForm.email &&
+            registerForm.password
+          ) {
             const newUserRef = push(usersRef);
             bcrypt.hash(registerForm.password, 10, function async(err, hash) {
               set(newUserRef, { ...registerForm, password: hash });
@@ -47,7 +51,7 @@ function Register() {
 
             navigate("/home");
           }
-          setError(true);
+          setError(user);
         } else {
           console.log("No data available");
         }
@@ -64,32 +68,43 @@ function Register() {
           Sign In
         </a>
         <h1>Register</h1>
-        <div className="text-input">
-          <div>Email:</div>
+        <div style={{ padding: "20px 0" }}>
           <Input
             type="email"
+            label="Email"
             placeholder="Email"
             style={{ marginBottom: "10px" }}
             onChange={(e) =>
               setRegisterForm({ ...registerForm, email: e.target.value })
             }
+            helperText={
+              isSubmit && registerForm.email === "" && "this field is required"
+            }
+            error={isSubmit && registerForm.email === ""}
           />
         </div>
-        <div className="text-input">
-          <div>Password:</div>
+        <div style={{ padding: "20px 0" }}>
           <Input
             type="password"
+            label="Password"
+            required
             placeholder="Password"
             style={{ marginBottom: "15px" }}
             onChange={(e) =>
               setRegisterForm({ ...registerForm, password: e.target.value })
             }
+            helperText={
+              isSubmit &&
+              registerForm.password === "" &&
+              "this field is required"
+            }
+            error={isSubmit && registerForm.password === ""}
           />
         </div>
-        <div className="text-input">
-          <div>Name:</div>
+        <div style={{ padding: "20px 0" }}>
           <Input
             type="text"
+            label="Name"
             placeholder="enter your name"
             style={{ marginBottom: "15px" }}
             onChange={(e) =>
@@ -97,24 +112,15 @@ function Register() {
             }
           />
         </div>
-        <div className="text-input">
-          <div>Number:</div>
+        <div style={{ padding: "20px 0" }}>
           <Input
-            type="number"
+            label="Phone Number"
+            variant="outlined"
+            name="phone"
             placeholder="your phone number"
             style={{ marginBottom: "15px" }}
             onChange={(e) =>
               setRegisterForm({ ...registerForm, number: e.target.value })
-            }
-          />
-        </div>
-        <div className="text-input">
-          <div>Birth of Day:</div>
-          <Input
-            type="date"
-            style={{ marginBottom: "15px" }}
-            onChange={(e) =>
-              setRegisterForm({ ...registerForm, birthday: e.target.value })
             }
           />
         </div>

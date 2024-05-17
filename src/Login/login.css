@@ -34,6 +34,6 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  width: fill-available;
+  width: stretch;
   padding: 8px 20px;
 }

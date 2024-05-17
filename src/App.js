@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { BrowserRouter as Router, Navigate, Route, Routes as Switch } from 'react-router-dom';
+import React from "react";
+import { Navigate, Route, BrowserRouter as Router, Routes as Switch } from 'react-router-dom';
 
 import "./App.css";
 import Login from "./Login";
@@ -7,7 +7,6 @@ import Home from "./pages/Home";
 import Register from "./Register";
 
 export default function App() {
-
   return (
     <Router>
         <Switch>
