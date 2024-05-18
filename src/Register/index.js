@@ -33,11 +33,7 @@ function Register() {
             (user) => user.email === registerForm.email
           );
 
-          if (
-            !user &&
-            registerForm.email &&
-            registerForm.password
-          ) {
+          if (!user && registerForm.email && registerForm.password) {
             const newUserRef = push(usersRef);
             bcrypt.hash(registerForm.password, 10, function async(err, hash) {
               set(newUserRef, { ...registerForm, password: hash });
@@ -64,9 +60,16 @@ function Register() {
   return (
     <div className="container">
       <div className="register">
-        <a className="signin" href="/login">
+        <Button
+          sx={{
+            position: "fixed",
+            top: "5px",
+            right: "20px",
+          }}
+          onClick={() => navigate("/login")}
+        >
           Sign In
-        </a>
+        </Button>
         <h1>Register</h1>
         <div style={{ padding: "20px 0" }}>
           <Input

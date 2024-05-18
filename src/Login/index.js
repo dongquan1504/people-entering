@@ -65,9 +65,16 @@ function Login() {
   return (
     <div className="container">
       <div className="login">
-        <a className="signin" href="/register">
+        <Button
+          sx={{
+            position: "fixed",
+            top: "5px",
+            right: "20px",
+          }}
+          onClick={() => navigate("/register")}
+        >
           Register
-        </a>
+        </Button>
         <h1>Login</h1>
         <div style={{ padding: "20px 0" }}>
           <Input

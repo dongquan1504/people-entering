@@ -23,9 +23,3 @@
   align-items: center;
   justify-content: space-around;
 }
-
-.signin {
-  position: fixed;
-  top: 5px;
-  right: 20px;
-}
