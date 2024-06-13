@@ -15,6 +15,7 @@ import {
 import "chartjs-adapter-moment";
 import { get, ref } from "firebase/database";
 import { Bar, Line } from "react-chartjs-2";
+import Scaner from "../../Component/Scaner";
 import db from "../../firebase";
 
 import Header from "../../Component/Header";
@@ -33,6 +34,7 @@ ChartJS.register(
 function Home() {
   const [valueTab, setValueTab] = useState(0);
   const [data, setData] = useState([]);
+  const [isScanner, setIsScanner] = useState(false);
 
   const config = {
     labels: (data || []).map((d) => d?.name),
@@ -102,7 +104,7 @@ function Home() {
   ];
 
   return (
-    <Header>
+    <Header setIsScanner={setIsScanner} isScanner={isScanner}>
       <Tabs
         role="tabs"
         aria-label="basic tabs"
@@ -130,6 +132,8 @@ function Home() {
           </div>
         ) : null
       )}
+
+      {isScanner && <Scaner isScanner={isScanner} />}
 
       {/* {isBarMode && <Bar data={config} options={options} />} */}
     </Header>

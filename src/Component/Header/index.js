@@ -1,16 +1,16 @@
+import MenuIcon from "@mui/icons-material/Menu";
+import { Drawer, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton, Drawer } from "@mui/material";
 
 import Button from "../Button";
+import MyQRCode from "../QRCode";
 import "./header.css";
 
-export default function Header({ children }) {
+export default function Header({ children, setIsScanner, isScanner }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const savedAccount = JSON.parse(localStorage.getItem("account"));
-  console.log(savedAccount);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -41,6 +41,15 @@ export default function Header({ children }) {
         <div style={{ width: "80vw", maxWidth: "400px", padding: "20px 10px" }}>
           Hello {savedAccount?.name || "Guest"}!!
         </div>
+        <Button
+          onClick={() => {
+            toggleDrawer();
+            setIsScanner(!isScanner);
+          }}
+        >
+          {!isScanner ? "Start" : "End"} Scan
+        </Button>
+        <MyQRCode />
       </Drawer>
     </header>
   );
