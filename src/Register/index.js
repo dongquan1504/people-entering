@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, FormControl, MenuItem, Select } from "@mui/material";
 import bcrypt from "bcryptjs";
 import { get, push, ref, set } from "firebase/database";
 import { useState } from "react";
@@ -15,12 +15,14 @@ const initializeLoginForm = {
   password: "",
   name: "",
   number: "",
+  role: "student",
 };
 
 function Register() {
   const [registerForm, setRegisterForm] = useState(initializeLoginForm);
   const [isError, setError] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
+
   const navigate = useNavigate();
   const usersRef = ref(db, "users");
 
@@ -71,12 +73,12 @@ function Register() {
           Sign In
         </Button>
         <h1>Register</h1>
-        <div style={{ padding: "20px 0" }}>
+        <FormControl sx={{ padding: "5px" }}>
           <Input
             type="email"
             label="Email"
             placeholder="Email"
-            style={{ marginBottom: "10px" }}
+            style={{ marginBottom: "30px" }}
             onChange={(e) =>
               setRegisterForm({ ...registerForm, email: e.target.value })
             }
@@ -85,14 +87,12 @@ function Register() {
             }
             error={isSubmit && registerForm.email === ""}
           />
-        </div>
-        <div style={{ padding: "20px 0" }}>
           <Input
             type="password"
             label="Password"
             required
             placeholder="Password"
-            style={{ marginBottom: "15px" }}
+            style={{ marginBottom: "30px" }}
             onChange={(e) =>
               setRegisterForm({ ...registerForm, password: e.target.value })
             }
@@ -103,30 +103,37 @@ function Register() {
             }
             error={isSubmit && registerForm.password === ""}
           />
-        </div>
-        <div style={{ padding: "20px 0" }}>
           <Input
             type="text"
             label="Name"
             placeholder="enter your name"
-            style={{ marginBottom: "15px" }}
+            style={{ marginBottom: "30px" }}
             onChange={(e) =>
               setRegisterForm({ ...registerForm, name: e.target.value })
             }
           />
-        </div>
-        <div style={{ padding: "20px 0" }}>
           <Input
             label="Phone Number"
             variant="outlined"
             name="phone"
             placeholder="your phone number"
-            style={{ marginBottom: "15px" }}
+            style={{ marginBottom: "30px" }}
             onChange={(e) =>
               setRegisterForm({ ...registerForm, number: e.target.value })
             }
           />
-        </div>
+          <Select
+            defaultValue={registerForm.role}
+            value={registerForm.role}
+            fullWidth
+            onChange={(e) =>
+              setRegisterForm({ ...registerForm, role: e.target.value })
+            }
+          >
+            <MenuItem value="student">Student</MenuItem>
+            <MenuItem value="teacher">Teacher</MenuItem>
+          </Select>
+        </FormControl>
 
         {isError && (
           <Box sx={{ color: "red", size: "small" }}>this email existed</Box>
