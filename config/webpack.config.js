@@ -340,6 +340,7 @@ module.exports = function (webpackEnv) {
         "stream": require.resolve("stream-browserify"),
         "buffer": require.resolve("buffer/"),
         "vm": require.resolve("vm-browserify"),
+        "path": require.resolve("path-browserify"),
       },
     },
     module: {

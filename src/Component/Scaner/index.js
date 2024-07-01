@@ -4,9 +4,44 @@ import React, { useEffect, useRef } from "react";
 import { QrReader } from "react-qr-reader";
 import db from "../../firebase";
 
+function truncateFloat(num) {
+  const numStr = num.toString();
+  const dotIndex = numStr.indexOf(".");
+  if (dotIndex === -1) return num; // No decimal point, return the original number
+  return numStr.slice(0, dotIndex + 4); // Keep three digits after the dot
+}
+
 function Scaner({ isScanner, savedAccount, setIsScanner }) {
   const qrReaderRef = useRef(null);
   const dataRef = ref(db, "data");
+  const teacherRef = ref(db, "users");
+
+  const checkLocation = (email) => {
+    get(teacherRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        const array = Object.values(snapshot.val());
+        const index = array.findIndex((item) => item?.email === email);
+        if (index !== -1) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const isLocationMatch =
+                truncateFloat(position.coords.latitude) ===
+                truncateFloat(array[index].latitude);
+              const isLongitudeMatch =
+                truncateFloat(position.coords.longitude) ===
+                truncateFloat(array[index].longitude);
+              if (!(isLongitudeMatch && isLocationMatch))
+                console.log("Do not cheating!");
+              return isLongitudeMatch && isLocationMatch;
+            },
+            (error) => {
+              console.log(error.message);
+            }
+          );
+        }
+      }
+    });
+  };
 
   const handleScan = (data) => {
     if (data) {
@@ -27,6 +62,8 @@ function Scaner({ isScanner, savedAccount, setIsScanner }) {
               item?.teacher_email === email &&
               id === item?.class_id
           );
+
+          if (!checkLocation(email)) return;
 
           // If such an object is found, add exit_time and exit_day to it
           if (index !== -1) {

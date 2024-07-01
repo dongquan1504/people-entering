@@ -6,13 +6,16 @@ import { useNavigate } from "react-router-dom";
 import Scaner from "../Scaner";
 import Button from "../Button";
 import MyQRCode from "../QRCode";
+import LocationComponent from "../Location";
 import "./header.css";
 
 export default function Header({ children }) {
   const navigate = useNavigate();
+  const savedAccount = JSON.parse(localStorage.getItem("account"));
+
   const [open, setOpen] = useState(false);
   const [isScanner, setIsScanner] = useState(false);
-  const savedAccount = JSON.parse(localStorage.getItem("account"));
+  const [qr, setQr] = React.useState(savedAccount.class_id);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -46,7 +49,11 @@ export default function Header({ children }) {
           Qr.
         </span>
       ) : (
-        <Scaner isScanner={isScanner} savedAccount={savedAccount} setIsScanner={setIsScanner} />
+        <Scaner
+          isScanner={isScanner}
+          savedAccount={savedAccount}
+          setIsScanner={setIsScanner}
+        />
       )}
       <Drawer open={open} onClose={toggleDrawer} anchor="right">
         <div style={{ width: "80vw", maxWidth: "400px", padding: "20px 10px" }}>
@@ -62,8 +69,9 @@ export default function Header({ children }) {
             {!isScanner ? "Start" : "End"} Scan
           </Button>
         ) : (
-          <MyQRCode savedAccount={savedAccount} value={savedAccount?.email}/>
+          <MyQRCode qr={qr} setQr={setQr} value={savedAccount?.email} />
         )}
+        <LocationComponent savedAccount={savedAccount} />
       </Drawer>
     </header>
   );
