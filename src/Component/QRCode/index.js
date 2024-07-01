@@ -6,7 +6,6 @@ import { FormControl } from "@mui/material";
 import db from "../../firebase";
 import Button from "../Button";
 import Input from "../Input";
-import { name } from "file-loader";
 
 function generateRandomString(length) {
   let result = "";

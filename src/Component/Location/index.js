@@ -41,7 +41,7 @@ function LocationComponent({ savedAccount }) {
         }
       }
     });
-  }, []);
+  }, [userRef, savedAccount?.email]);
 
   return (
     <div>
