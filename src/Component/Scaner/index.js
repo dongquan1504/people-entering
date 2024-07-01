@@ -115,7 +115,7 @@ function Scaner({ isScanner, savedAccount, setIsScanner }) {
         onError={handleError}
         style={{ width: "100%" }}
         onResult={handleScan}
-        facingMode="environment"
+        constraints={{ facingMode: "environment" }}
       />
     </div>
   );
