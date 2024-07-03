@@ -26,7 +26,7 @@ ChartJS.register(
   TimeScale
 );
 
-export default function ChartTab({item, savedAccount}){
+export default function ChartTab({ item, savedAccount }) {
   const [valueTab, setValueTab] = useState(0);
   const options = {
     // responsive: true,
@@ -47,9 +47,7 @@ export default function ChartTab({item, savedAccount}){
     setValueTab(newValue);
   };
 
-  console.log(item);
   const config = (res) => {
-    console.log(res);
     return {
       labels: (res || []).map((d) => d?.name),
       datasets: [
@@ -102,9 +100,15 @@ export default function ChartTab({item, savedAccount}){
     },
   ];
 
+  const className = savedAccount?.class_id.find(
+    (i) => i.id === item[0]?.class_id
+  )?.name;
+  console.log(className);
+  console.log(item);
+
   return (
     <div style={{ padding: "10px" }}>
-      <span>Attendance on {item[0]?.entry_day}</span>
+      <span>{className} Attendance on {item[0]?.entry_day}</span>
       <Tabs
         role="tabs"
         aria-label="basic tabs"

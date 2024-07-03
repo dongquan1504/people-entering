@@ -1,11 +1,12 @@
 import { get, ref, set } from "firebase/database";
-import QRCode from "qrcode.react";
+
 import React from "react";
 import { FormControl } from "@mui/material";
 
 import db from "../../firebase";
 import Button from "../Button";
 import Input from "../Input";
+import QRItem from "./QRItem";
 
 function generateRandomString(length) {
   let result = "";
@@ -106,23 +107,7 @@ function MyQRCode({ value, qr, setQr }) {
           onChange={(e) => setClassName(e.target.value)}
         />
       </FormControl>
-      {qr.map((ids) => (
-        <div
-          style={{
-            margin: "10px",
-            border: "1px solid black",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          Class Name: {ids?.name}
-          <div style={{ margin: "auto" }}>
-            <QRCode value={value + "," + (ids.id || ids)} />
-          </div>
-          <Button onClick={() => handleDeleteQr(ids.id || ids)}>
-            End Class
-          </Button>
-        </div>
+      {qr.map((ids) => (<QRItem ids={ids} handleDeleteQr={handleDeleteQr} value={value} />
       ))}
     </>
   );
