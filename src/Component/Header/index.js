@@ -1,4 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +59,9 @@ export default function Header({ children }) {
       <Drawer open={open} onClose={toggleDrawer} anchor="right">
         <div style={{ width: "80vw", maxWidth: "400px", padding: "20px 10px" }}>
           Hello {savedAccount?.name || "Guest"}!!
+          <IconButton onClick={toggleDrawer}>
+            <CloseIcon />
+          </IconButton>
         </div>
         {savedAccount.role === "student" ? (
           <Button

@@ -54,7 +54,7 @@ export default function ChartTab({ item, savedAccount }) {
         {
           label: "entry time",
           data: (res || []).map(
-            (d) => new Date(`1970-01-01T${d?.entry_time}+08:00`)
+            (d) => new Date(`1970-01-01 ${d?.entry_time}+08:00`)
           ),
           backgroundColor: "green",
           borderColor: "green",
@@ -63,7 +63,7 @@ export default function ChartTab({ item, savedAccount }) {
         {
           label: "exit time",
           data: (res || []).map(
-            (d) => new Date(`1970-01-01T${d?.exit_time}+08:00`)
+            (d) => new Date(`1970-01-01 ${d?.exit_time}+08:00`)
           ),
           backgroundColor: "gray",
           borderColor: "gray",

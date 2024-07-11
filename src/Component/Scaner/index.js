@@ -11,37 +11,33 @@ function truncateFloat(num) {
   return numStr.slice(0, dotIndex + 4); // Keep three digits after the dot
 }
 
+const checkLocation = (email, savedAccount) => {
+  const teacherRef = ref(db, "users");
+  let result = true;
+  get(teacherRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const array = Object.values(snapshot.val());
+      const index = array.findIndex((item) => item?.email === email);
+
+      if (index !== -1) {
+        const isLocationMatch =
+          truncateFloat(savedAccount.latitude) ===
+          truncateFloat(array[index].latitude);
+        const isLongitudeMatch =
+          truncateFloat(savedAccount.longitude) ===
+          truncateFloat(array[index].longitude);
+
+        if (!(isLongitudeMatch && isLocationMatch)) alert("Do not cheating!");
+        result = (isLongitudeMatch && isLocationMatch);
+      }
+    }
+  });
+  return result;
+};
+
 function Scaner({ isScanner, savedAccount, setIsScanner }) {
   const qrReaderRef = useRef(null);
   const dataRef = ref(db, "data");
-  const teacherRef = ref(db, "users");
-
-  const checkLocation = (email) => {
-    get(teacherRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const array = Object.values(snapshot.val());
-        const index = array.findIndex((item) => item?.email === email);
-        if (index !== -1) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const isLocationMatch =
-                truncateFloat(position.coords.latitude) ===
-                truncateFloat(array[index].latitude);
-              const isLongitudeMatch =
-                truncateFloat(position.coords.longitude) ===
-                truncateFloat(array[index].longitude);
-              if (!(isLongitudeMatch && isLocationMatch))
-                console.log("Do not cheating!");
-              return isLongitudeMatch && isLocationMatch;
-            },
-            (error) => {
-              console.log(error.message);
-            }
-          );
-        }
-      }
-    });
-  };
 
   const handleScan = (data) => {
     if (data) {
@@ -50,23 +46,37 @@ function Scaner({ isScanner, savedAccount, setIsScanner }) {
       const email = emailAndId[0]; // "email@gmail.com"
       const id = emailAndId[1];
 
+      if (!checkLocation(email, savedAccount)) {
+        setIsScanner(!isScanner);
+        qrReaderRef.current.stopStream();
+        return;
+      }
+
       get(dataRef).then((snapshot) => {
         if (snapshot.exists()) {
           const array = Object.values(snapshot.val());
 
           // Find the index of the object where name, role, and teacher_email match
-          const index = array.findIndex(
-            (item) =>
+          const index = array.reduce(
+            (acc, item, idx) =>
               item?.name === savedAccount?.name &&
               item?.role === savedAccount?.role &&
               item?.teacher_email === email &&
               id === item?.class_id
+                ? idx
+                : acc,
+            -1
           );
 
-          if (!checkLocation(email)) return;
-
           // If such an object is found, add exit_time and exit_day to it
-          if (index !== -1) {
+          if (
+            index !== -1 &&
+            array[index].entry_day === new Date().toLocaleDateString()
+          ) {
+            if (array[index].exit_day === new Date().toLocaleDateString()) {
+              alert("Attendance already taken!");
+              return;
+            }
             array[index].exit_day = new Date().toLocaleDateString();
             array[index].exit_time = new Date().toLocaleTimeString("en-US", {
               hour12: false,
@@ -90,8 +100,10 @@ function Scaner({ isScanner, savedAccount, setIsScanner }) {
             const newDataRef = push(dataRef);
             set(newDataRef, { teacher_email: email, ...newData });
           }
+          alert("Attendance taken successfully!");
         }
       });
+
       setIsScanner(!isScanner);
       qrReaderRef.current.stopStream();
     }
