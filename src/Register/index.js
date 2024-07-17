@@ -38,7 +38,11 @@ function Register() {
           if (!user && registerForm.email && registerForm.password) {
             const newUserRef = push(usersRef);
             bcrypt.hash(registerForm.password, 10, function async(err, hash) {
-              set(newUserRef, { ...registerForm, password: hash });
+              set(newUserRef, {
+                ...registerForm,
+                password: hash,
+                class_id: [],
+              });
               const userWithoutPassword = { ...registerForm };
               delete userWithoutPassword.password;
               localStorage.setItem(

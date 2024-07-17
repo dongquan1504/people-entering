@@ -100,7 +100,7 @@ export default function ChartTab({ item, savedAccount }) {
     },
   ];
 
-  const className = savedAccount?.class_id.find(
+  const className = (savedAccount?.class_id || []).find(
     (i) => i.id === item[0]?.class_id
   )?.name;
   console.log(className);
@@ -108,7 +108,9 @@ export default function ChartTab({ item, savedAccount }) {
 
   return (
     <div style={{ padding: "10px" }}>
-      <span>{className} Attendance on {item[0]?.entry_day}</span>
+      <span>
+        {className} Attendance on {item[0]?.entry_day}
+      </span>
       <Tabs
         role="tabs"
         aria-label="basic tabs"

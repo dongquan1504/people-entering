@@ -16,7 +16,7 @@ export default function Header({ children }) {
 
   const [open, setOpen] = useState(false);
   const [isScanner, setIsScanner] = useState(false);
-  const [qr, setQr] = React.useState(savedAccount.class_id);
+  const [qr, setQr] = React.useState(savedAccount?.class_id || []);
 
   const toggleDrawer = () => {
     setOpen(!open);

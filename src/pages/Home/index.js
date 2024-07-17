@@ -35,8 +35,12 @@ function Home() {
 
   return (
     <Header>
-      {data.map((item) => 
-        <ChartTab item={item} savedAccount={savedAccount} />
+      {!data.length ? (
+        data.map((item) => <ChartTab item={item} savedAccount={savedAccount} />)
+      ) : (
+        <span style={{ padding: "80px", display: "flex" }}>
+        You dont manage any class
+        </span>
       )}
 
       {/* {isBarMode && <Bar data={config} options={options} />} */}
