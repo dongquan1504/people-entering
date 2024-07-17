@@ -42,7 +42,10 @@ function MyQRCode({ value, qr, setQr }) {
 
           // Generate a random string and push it to the class_id array
           const randomString = generateRandomString(20);
-          array[index].class_id.push({ id: randomString, name: className });
+          array[index].class_id = [
+            ...qr,
+            { id: randomString, name: className },
+          ];
 
           // Write the updated array back to Firebase
           setQr([...qr, { id: randomString, name: className }]);
@@ -104,10 +107,12 @@ function MyQRCode({ value, qr, setQr }) {
           label="Class Name"
           placeholder="enter your name"
           style={{ marginBottom: "30px" }}
+          value={className}
           onChange={(e) => setClassName(e.target.value)}
         />
       </FormControl>
-      {qr.map((ids) => (<QRItem ids={ids} handleDeleteQr={handleDeleteQr} value={value} />
+      {qr.map((ids) => (
+        <QRItem ids={ids} handleDeleteQr={handleDeleteQr} value={value} />
       ))}
     </>
   );

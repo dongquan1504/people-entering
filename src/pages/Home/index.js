@@ -10,13 +10,24 @@ function Home() {
   const [data, setData] = useState([]);
   const savedAccount = JSON.parse(localStorage.getItem("account"));
 
-  useEffect(() => {
+  const fetchData = (account) => {
     get(ref(db, "data"))
       .then((snapshot) => {
         if (snapshot.exists()) {
+          if (
+            !Object.values(snapshot.val())
+              .map((item) => item.teacher_email)
+              .includes(account?.email)
+          )
+            return;
+
+          const yourClass = Object.values(snapshot.val()).filter(
+            (item) => item.teacher_email === account?.email
+          );
+
           setData(
             Object.values(
-              Object.values(snapshot.val()).reduce((acc, obj) => {
+              yourClass.reduce((acc, obj) => {
                 const key = obj.entry_day;
                 if (!acc[key]) {
                   acc[key] = [];
@@ -31,15 +42,19 @@ function Home() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  };
+
+  useEffect(()=>fetchData(savedAccount), [savedAccount]);
 
   return (
-    <Header>
-      {!data.length ? (
-        data.map((item) => <ChartTab item={item} savedAccount={savedAccount} />)
+    <Header fetchData={fetchData}>
+      {!!data.length ? (
+        data.map((item) => (
+          <ChartTab key={item} item={item} savedAccount={savedAccount} />
+        ))
       ) : (
         <span style={{ padding: "80px", display: "flex" }}>
-        You dont manage any class
+          You dont manage any class
         </span>
       )}
 

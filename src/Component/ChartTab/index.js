@@ -80,7 +80,7 @@ export default function ChartTab({ item, savedAccount }) {
       component: (
         <Bar
           data={config(
-            res.filter((i) => i.teacher_email === savedAccount.email)
+            res.filter((i) => i.teacher_email === savedAccount?.email)
           )}
           options={options}
         />
@@ -92,7 +92,7 @@ export default function ChartTab({ item, savedAccount }) {
       component: (
         <Line
           data={config(
-            res.filter((i) => i.teacher_email === savedAccount.email)
+            res.filter((i) => i.teacher_email === savedAccount?.email)
           )}
           options={options}
         />
@@ -103,8 +103,6 @@ export default function ChartTab({ item, savedAccount }) {
   const className = (savedAccount?.class_id || []).find(
     (i) => i.id === item[0]?.class_id
   )?.name;
-  console.log(className);
-  console.log(item);
 
   return (
     <div style={{ padding: "10px" }}>

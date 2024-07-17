@@ -15,33 +15,35 @@ function LocationComponent({ savedAccount }) {
       return;
     }
 
-    get(userRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const array = Object.values(snapshot.val());
+    if (!location.latitude || !location.longitude) {
+      get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const array = Object.values(snapshot.val());
 
-        const index = array.findIndex(
-          (item) => item?.email === savedAccount?.email
-        );
-
-        if (index !== -1) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              setLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              });
-              array[index].latitude = position.coords.latitude;
-              array[index].longitude = position.coords.longitude;
-              set(userRef, array);
-            },
-            (error) => {
-              setError(error.message);
-            }
+          const index = array.findIndex(
+            (item) => item?.email === savedAccount?.email
           );
+
+          if (index !== -1) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                setLocation({
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                });
+                array[index].latitude = position.coords.latitude;
+                array[index].longitude = position.coords.longitude;
+                set(userRef, array);
+              },
+              (error) => {
+                setError(error.message);
+              }
+            );
+          }
         }
-      }
-    });
-  }, [userRef, savedAccount?.email]);
+      });
+    }
+  }, [userRef, savedAccount?.email, location.latitude, location.longitude]);
 
   return (
     <div>

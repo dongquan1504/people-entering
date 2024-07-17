@@ -21,10 +21,10 @@ const checkLocation = (email, savedAccount) => {
 
       if (index !== -1) {
         const isLocationMatch =
-          truncateFloat(savedAccount.latitude) ===
+          truncateFloat(savedAccount?.latitude) ===
           truncateFloat(array[index].latitude);
         const isLongitudeMatch =
-          truncateFloat(savedAccount.longitude) ===
+          truncateFloat(savedAccount?.longitude) ===
           truncateFloat(array[index].longitude);
 
         if (!(isLongitudeMatch && isLocationMatch)) alert("Do not cheating!");

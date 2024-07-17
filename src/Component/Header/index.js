@@ -10,7 +10,7 @@ import MyQRCode from "../QRCode";
 import LocationComponent from "../Location";
 import "./header.css";
 
-export default function Header({ children }) {
+export default function Header({ fetchData, children }) {
   const navigate = useNavigate();
   const savedAccount = JSON.parse(localStorage.getItem("account"));
 
@@ -20,6 +20,7 @@ export default function Header({ children }) {
 
   const toggleDrawer = () => {
     setOpen(!open);
+    if(open) fetchData(savedAccount);
   };
 
   return (
@@ -39,10 +40,17 @@ export default function Header({ children }) {
           <IconButton onClick={toggleDrawer}>
             <MenuIcon />
           </IconButton>
-          <Button onClick={() => navigate("/login")}>Sign Out</Button>
+          <Button
+            onClick={() => {
+              navigate("/login");
+              localStorage.clear();
+            }}
+          >
+            Sign Out
+          </Button>
         </div>
       </div>
-      {savedAccount.role === "teacher" ? (
+      {savedAccount?.role === "teacher" ? (
         children
       ) : !isScanner ? (
         <span style={{ padding: "80px", display: "flex" }}>
@@ -63,7 +71,7 @@ export default function Header({ children }) {
             <CloseIcon />
           </IconButton>
         </div>
-        {savedAccount.role === "student" ? (
+        {savedAccount?.role === "student" ? (
           <Button
             onClick={() => {
               toggleDrawer();
